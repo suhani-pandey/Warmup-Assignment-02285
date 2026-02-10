@@ -10,7 +10,6 @@ start_time = time.perf_counter()
 
 
 def search(initial_state: State, frontier: Frontier) -> list[list[Action]] | None:
-    
     output_fixed_solution = False
 
     if output_fixed_solution:
