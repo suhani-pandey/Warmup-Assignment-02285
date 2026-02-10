@@ -29,7 +29,6 @@ This is a Python-based AI search client for solving pathfinding and planning pro
    ├── server.jar
    ├── levels/
    ├── searchclient_python/
-   └── searchclient_java/
    ```
 
 ### Step 2: Clone This Repository
