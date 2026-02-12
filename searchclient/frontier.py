@@ -80,27 +80,35 @@ class FrontierDFS(Frontier):
     def get_name(self) -> str:
         return "depth-first search"
 
+import heapq
 
 class FrontierBestFirst(Frontier):
     def __init__(self, heuristic: Heuristic) -> None:
         super().__init__()
         self.heuristic = heuristic
-        raise NotImplementedError
+        self.heap: list[tuple[int, State]] = []
+        self.set: set[State] = set()
+        self.counter = 0
 
     def add(self, state: State) -> None:
-        raise NotImplementedError
+        f_value = self.heuristic.f(state)
+        heapq.heappush(self.heap, (f_value, self.counter, state))
+        self.set.add(state)
+        self.counter += 1
 
     def pop(self) -> State:
-        raise NotImplementedError
+        _, _, state = heapq.heappop(self.heap)
+        self.set.remove(state)
+        return state
 
     def is_empty(self) -> bool:
-        raise NotImplementedError
+        return len(self.heap) == 0
 
     def size(self) -> int:
-        raise NotImplementedError
+        return len(self.heap)
 
     def contains(self, state: State) -> bool:
-        raise NotImplementedError
+        return state in self.set
 
     def get_name(self) -> str:
         return f"best-first search using {self.heuristic}"
