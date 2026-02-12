@@ -10,7 +10,7 @@ start_time = time.perf_counter()
 
 
 def search(initial_state: State, frontier: Frontier) -> list[list[Action]] | None:
-    output_fixed_solution = True
+    output_fixed_solution = False
 
     if output_fixed_solution:
         # Part 1:
@@ -54,7 +54,28 @@ def search(initial_state: State, frontier: Frontier) -> list[list[Action]] | Non
             print("Maximum memory usage exceeded.", file=sys.stderr, flush=True)
             return None
 
-        # Your code here...
+        # Check if frontier is empty (failure)
+        if frontier.is_empty():
+            print_search_status(explored, frontier)
+            print("No solution found.", file=sys.stderr, flush=True)
+            return None
+
+        # Pop the next state from the frontier
+        current_state = frontier.pop()
+
+        # Check if this is a goal state
+        if current_state.is_goal_state():
+            print_search_status(explored, frontier)
+            return current_state.extract_plan()
+
+        # Add current state to explored set
+        explored.add(current_state)
+
+        # Expand the current state and add children to frontier
+        for child_state in current_state.get_expanded_states():
+            # Only add if not already explored and not in frontier
+            if child_state not in explored and not frontier.contains(child_state):
+                frontier.add(child_state)
 
 
 def print_search_status(explored: set[State], frontier: Frontier) -> None:
