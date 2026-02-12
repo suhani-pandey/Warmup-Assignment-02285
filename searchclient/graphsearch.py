@@ -13,31 +13,12 @@ def search(initial_state: State, frontier: Frontier) -> list[list[Action]] | Non
     output_fixed_solution = False
 
     if output_fixed_solution:
-        # Part 1:
-        # The agents will perform the sequence of actions returned by this method.
-        # Try to solve a few levels by hand, enter the found solutions below, and run them:
-
         return [
             [Action.MoveS],
             [Action.MoveE],
             [Action.MoveE],
             [Action.MoveS],
         ]
-
-    # Part 2:
-    # Now try to implement the Graph-Search algorithm from R&N figure 3.7
-    # In the case of "failure to find a solution" you should return None.
-    # Some useful methods on the state class which you will need to use are:
-    # state.is_goal_state() - Returns true if the state is a goal state.
-    # state.extract_plan() - Returns the list of actions used to reach this state.
-    # state.get_expanded_states() - Returns a list containing the states reachable from the current state.
-    # You should also take a look at frontier.py to see which methods the Frontier interface exposes
-    #
-    # print_search_status(expanded, frontier): As you can see below, the code will print out status
-    # (#expanded states, size of the frontier, #generated states, total time used) for every 1000th node
-    # generated.
-    # You should also make sure to print out these stats when a solution has been found, so you can keep
-    # track of the exact total number of states generated!!
 
     iterations = 0
 
@@ -54,28 +35,21 @@ def search(initial_state: State, frontier: Frontier) -> list[list[Action]] | Non
             print("Maximum memory usage exceeded.", file=sys.stderr, flush=True)
             return None
 
-        # Check if frontier is empty (failure)
         if frontier.is_empty():
             print_search_status(explored, frontier)
-            print("No solution found.", file=sys.stderr, flush=True)
             return None
 
-        # Pop the next state from the frontier
-        current_state = frontier.pop()
+        state = frontier.pop()
 
-        # Check if this is a goal state
-        if current_state.is_goal_state():
+        if state.is_goal_state():
             print_search_status(explored, frontier)
-            return current_state.extract_plan()
+            return state.extract_plan()
 
-        # Add current state to explored set
-        explored.add(current_state)
+        explored.add(state)
 
-        # Expand the current state and add children to frontier
-        for child_state in current_state.get_expanded_states():
-            # Only add if not already explored and not in frontier
-            if child_state not in explored and not frontier.contains(child_state):
-                frontier.add(child_state)
+        for child in state.get_expanded_states():
+            if not frontier.contains(child) and child not in explored:
+                frontier.add(child)
 
 
 def print_search_status(explored: set[State], frontier: Frontier) -> None:
