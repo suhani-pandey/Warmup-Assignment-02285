@@ -74,7 +74,6 @@ def search(initial_state: State, frontier: Frontier) -> list[list[Action]] | Non
             if child_state not in explored and not frontier.contains(child_state):
                 frontier.add(child_state)
 
-
 def print_search_status(explored: set[State], frontier: Frontier) -> None:
     elapsed_time = time.perf_counter() - start_time
     print(
