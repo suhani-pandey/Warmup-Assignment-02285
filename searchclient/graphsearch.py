@@ -35,7 +35,6 @@ def search(initial_state: State, frontier: Frontier) -> list[list[Action]] | Non
             print("Maximum memory usage exceeded.", file=sys.stderr, flush=True)
             return None
 
-<<<<<<< HEAD
         if frontier.is_empty():
             print_search_status(explored, frontier)
             return None
@@ -51,7 +50,7 @@ def search(initial_state: State, frontier: Frontier) -> list[list[Action]] | Non
         for child in state.get_expanded_states():
             if not frontier.contains(child) and child not in explored:
                 frontier.add(child)
-=======
+
         # Check if frontier is empty (failure)
         if frontier.is_empty():
             print_search_status(explored, frontier)
@@ -74,7 +73,6 @@ def search(initial_state: State, frontier: Frontier) -> list[list[Action]] | Non
             # Only add if not already explored and not in frontier
             if child_state not in explored and not frontier.contains(child_state):
                 frontier.add(child_state)
->>>>>>> 71274fb (Exercise 4 is done)
 
 
 def print_search_status(explored: set[State], frontier: Frontier) -> None:
