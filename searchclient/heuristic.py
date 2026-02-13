@@ -178,6 +178,66 @@ class HeuristicAdvanced(Heuristic):
             print(f"h(s) = {heuristic_value}", file=sys.stderr)
                         
         return heuristic_value
+# ============================================================
+# HEURISTIC 3: Agent–Box Heuristic (Exercise 2.6)
+# ============================================================
+class HeuristicAgentBox(HeuristicAdvanced):
+    """
+    Agent–Box Heuristic (Exercise 2.6):
+    Extends the BFS-preprocessed heuristic by additionally
+    considering the agent–box distance.
+    """
+
+    def h(self, state: State) -> int:
+        max_agent_distance = 0
+        total_box_distance = 0
+        min_agent_box_distance = float("inf")
+
+        # Single-agent assumption (valid for Sokoban levels)
+        agent_row = state.agent_rows[0]
+        agent_col = state.agent_cols[0]
+
+        for gr in range(len(State.goals)):
+            for gc in range(len(State.goals[gr])):
+                goal = State.goals[gr][gc]
+                if goal == "":
+                    continue
+
+                distances = self.goal_distances[(gr, gc)]
+
+                # Agent goal
+                if "0" <= goal <= "9":
+                    a = ord(goal) - ord("0")
+                    ar, ac = state.agent_rows[a], state.agent_cols[a]
+                    max_agent_distance = max(
+                        max_agent_distance,
+                        distances.get((ar, ac), abs(ar - gr) + abs(ac - gc))
+                    )
+
+                # Box goal
+                elif "A" <= goal <= "Z":
+                    for br in range(len(state.boxes)):
+                        for bc in range(len(state.boxes[br])):
+                            if state.boxes[br][bc] == goal:
+                                total_box_distance += distances.get(
+                                    (br, bc),
+                                    abs(br - gr) + abs(bc - gc)
+                                )
+
+                                min_agent_box_distance = min(
+                                    min_agent_box_distance,
+                                    abs(agent_row - br) + abs(agent_col - bc)
+                                )
+                                break
+
+        if min_agent_box_distance == float("inf"):
+            min_agent_box_distance = 0
+
+        return (
+            max_agent_distance
+            + total_box_distance
+            + min_agent_box_distance
+        )
 
 # ============================================================
 # EVALUATION STRATEGIES (A*, Greedy, WA*)
