@@ -1,0 +1,5 @@
+ServerPath: E:\DTU\Sem 4\AI & Multi-Agent\Warmup-Assignment-02285\server.jar
+LevelsDir: E:\DTU\Sem 4\AI & Multi-Agent\Warmup-Assignment-02285\levels
+BenchmarkFolder: E:\DTU\Sem 4\AI & Multi-Agent\Warmup-Assignment-02285\benchmarks
+ClientCommand: cmd /c "cd /d searchclient && python -m searchclient.searchclient -dfs"
+Timeout: 180

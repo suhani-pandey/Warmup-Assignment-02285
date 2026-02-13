@@ -94,6 +94,7 @@ class FrontierDFS(Frontier):
     def get_name(self) -> str:
         return "depth-first search"
 
+import heapq
 
 class FrontierBestFirst(Frontier):
     """

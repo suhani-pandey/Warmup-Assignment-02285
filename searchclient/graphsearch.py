@@ -1,14 +1,10 @@
 import sys
 import time
-
 from searchclient import memory
 from searchclient.action import Action
 from searchclient.frontier import Frontier
 from searchclient.state import State
-
 start_time = time.perf_counter()
-
-
 def search(initial_state: State, frontier: Frontier) -> list[list[Action]] | None:
     """
     Implements the Graph-Search algorithm from R&N Figure 3.7
@@ -27,7 +23,6 @@ def search(initial_state: State, frontier: Frontier) -> list[list[Action]] | Non
     
     # Initialize explored set to keep track of visited states
     explored: set[State] = set()
-
     while True:
         iterations += 1
         
