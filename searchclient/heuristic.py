@@ -22,9 +22,6 @@ class Heuristic(ABC):
     def __repr__(self) -> str: ...
 
 
-# ============================================================
-# HEURISTIC 1: Goal Count (Simple)
-# ============================================================
 class HeuristicGoalCount(Heuristic):
     """
     Simple Goal Count Heuristic: Returns the number of goals not yet satisfied.
@@ -56,9 +53,6 @@ class HeuristicGoalCount(Heuristic):
         return unsatisfied_goals
 
 
-# ============================================================
-# HEURISTIC 2: BFS-Preprocessed with Optimal Box-Goal Matching
-# ============================================================
 class HeuristicAdvanced(Heuristic):
     """
     Advanced Heuristic with BFS Preprocessing and proper box-goal matching.
