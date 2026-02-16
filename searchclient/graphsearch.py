@@ -17,6 +17,28 @@ def search(initial_state: State, frontier: Frontier) -> list[list[Action]] | Non
     5. Adds unexplored successors to frontier
     """
     iterations = 0
+
+    if output_fixed_solution:
+        # Part 1:
+        # The agents will perform the sequence of actions returned by this method.
+        # Try to solve a few levels by hand, enter the found solutions below, and run them:
+
+        return [
+            [Action.MoveS],
+            [Action.MoveS],
+            [Action.MoveE],
+            [Action.MoveE],
+            [Action.MoveE],
+            [Action.MoveE],
+            [Action.MoveE],
+            [Action.MoveE],
+            [Action.MoveE],
+            [Action.MoveE],
+            [Action.MoveE],
+            [Action.MoveE],
+            [Action.MoveS],
+            [Action.MoveS],
+        ]
     
     # Initialize frontier with initial state
     frontier.add(initial_state)
