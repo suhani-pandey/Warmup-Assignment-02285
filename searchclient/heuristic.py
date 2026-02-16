@@ -36,27 +36,11 @@ class HeuristicGoalCount(Heuristic):
 
 class HeuristicAdvanced(Heuristic):
     """
-    Advanced Heuristic v11 — Pure soft-penalty approach.
-    
     h(s) = goal_count * GOAL_WEIGHT
          + dead_box_count * DEAD_BOX_WEIGHT
          + hungarian_box_goal_cost
          + min_agent_to_unsatisfied_box
          + agent_goal_cost
-    
-    NO hard pruning at all — SACrunch requires boxes to pass through
-    dead cells, so any hard prune blocks the solution.
-    
-    Instead: very strong soft penalty per box on a dead cell.
-    DEAD_BOX_WEIGHT = 2 * GOAL_WEIGHT, so each dead-cell box looks like
-    2 extra unsatisfied goals. For SAD3 with 5 boxes, if 3 are in dead
-    cells, h increases by 6 * GOAL_WEIGHT — greedy will exhaust all
-    states with 0 dead boxes before ever considering those.
-    
-    For SACrunch, boxes briefly in dead cells are penalized but the
-    search CAN explore those paths. Since SACrunch is compact and the
-    solution is short (~116 actions), the search finds it before
-    running out of memory.
     """
     
     GOAL_WEIGHT = 10_000
@@ -68,7 +52,7 @@ class HeuristicAdvanced(Heuristic):
         num_rows = len(State.walls)
         num_cols = len(State.walls[0]) if num_rows > 0 else 0
         
-        # --- Collect goals ---
+        # Collect goals
         self.goal_positions = set()
         self.agent_goals = []
         self.box_goals_by_type = {}
@@ -86,7 +70,7 @@ class HeuristicAdvanced(Heuristic):
                         self.box_goals_by_type[gu] = []
                     self.box_goals_by_type[gu].append((r, c))
         
-        # --- Dead cells: corners + edge propagation ---
+        # Dead cells: corners + edge propagation 
         self.is_corner = [[False]*num_cols for _ in range(num_rows)]
         self.is_dead_cell = [[False]*num_cols for _ in range(num_rows)]
         
@@ -107,7 +91,7 @@ class HeuristicAdvanced(Heuristic):
         
         self._detect_edges(num_rows, num_cols)
         
-        # --- BFS distances ---
+        # BFS distances
         self.goal_distances = {}
         for r in range(len(State.goals)):
             for c in range(len(State.goals[r])):
@@ -199,7 +183,7 @@ class HeuristicAdvanced(Heuristic):
         return t
 
     def h(self, state: State) -> int:
-        # === Count boxes on dead cells (for soft penalty) ===
+        # Count boxes on dead cells (for soft penalty)
         dead_box_count = 0
         for r in range(len(state.boxes)):
             for c in range(len(state.boxes[r])):
@@ -207,7 +191,7 @@ class HeuristicAdvanced(Heuristic):
                     if self.is_dead_cell[r][c]:
                         dead_box_count += 1
         
-        # === Goal count (primary) ===
+        # Goal count (primary)
         uc = 0
         for row in range(len(State.goals)):
             for col in range(len(State.goals[row])):
@@ -221,10 +205,10 @@ class HeuristicAdvanced(Heuristic):
         
         total = uc * self.GOAL_WEIGHT
         
-        # === Soft dead-box penalty ===
+        # Soft dead-box penalty
         total += dead_box_count * self.DEAD_BOX_WEIGHT
         
-        # === Distance refinement ===
+        # Distance refinement
         mad = 0
         for gr,gc,an in self.agent_goals:
             d = self._gdist(gr,gc,state.agent_rows[an],state.agent_cols[an])
